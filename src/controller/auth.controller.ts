@@ -132,7 +132,7 @@ class AuthController {
     });
   }
 
-  public static logoutUser(req: Request, res: Response): void {
+  public static async logoutUser(req: Request, res: Response): Promise<void> {
     res.cookie("token", "", { maxAge: 0 });
     res.status(200).json({ status: "true", message: "User logged out" });
   }
