@@ -6,10 +6,10 @@ import connectDB from "./database/databaseConfig";
 import userRoutes from "./routes/auth.routes";
 import messageRoutes from "./routes/message.routes";
 import usersRoutes from "./routes/users.routes";
+import { app, server } from "./socket/socket";
 
 dotenv.config();
 
-const app = express();
 app.use(express.json()); // to parse incoming requests with JSON payloads
 app.use(express.urlencoded({ extended: true }));
 app.use(
@@ -26,7 +26,7 @@ app.use("/api/auth", userRoutes);
 app.use("/api/message", messageRoutes);
 app.use("/api/users", usersRoutes);
 
-app.listen(port, () => {
+server.listen(port, () => {
   connectDB();
   console.log(`Server is running on port ${port}`);
 });

@@ -1,6 +1,7 @@
 import { Response } from "express";
 import ConversationModel from "../models/ConversationModel";
 import MessageModel from "../models/MessageModel";
+import { getReceiverSocketId, io } from "../socket/socket";
 import { ExtendedAuthRequest } from "../types/globalTypes";
 
 class MessageController {
@@ -39,6 +40,12 @@ class MessageController {
     }
 
     await Promise.all([newMessage.save(), conversation.save()]);
+
+    const receiverSocketId = getReceiverSocketId(receiverId);
+
+    if (receiverSocketId) {
+      io.to(receiverSocketId).emit("newMessage", newMessage);
+    }
 
     return res.status(200).json({
       status: true,
